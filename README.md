@@ -1,5 +1,5 @@
 # senior-design-group45
-Repo used to store senior design dlp project
+Repository used to store senior design DLP project. This is a monorepo meaning that any code will be stored here in the applicable places. Frontend will go in the frontend folder and the backend items will go in the backend folder. In there you will find an additional README in which you will find how to build and run those applications. There is also going to be a folder for the database items. There might not be a ton in there but we should use that space to store scripts and any information on how to restore or start up that database.
 
 
 ## Tech Stack Documentation

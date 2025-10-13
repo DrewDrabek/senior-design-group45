@@ -104,3 +104,16 @@ We'll use different endpoint testers in order to test requests and we can do dif
 - [FastAPI docs](https://fastapi.tiangolo.com/)
 - [Pandas docs](https://pandas.pydata.org/)
 - [PyODBC docs](https://github.com/mkleehammer/pyodbc)
+
+## Next Steps
+
+Here's the plan for getting everything built:
+
+1. **Design the JSON objects** that the frontend will need
+2. **Create API endpoints** to send that data from backend to frontend first start with these and just a list of endpoints that are GOING to exist and then start to create them and find out dependencys.
+3. **Set up database structure** - tables, indexes, and stored procedures to get the data
+4. **Build the routes** and figure out what business logic we need and make sure that they are returning the expected json.
+5. **Create the data access layer** and see what's missing
+6. **Test everything** as we go and figure out how to test Python interactively in VS Code
+
+This should help us make sure the database works right and everything connects properly.

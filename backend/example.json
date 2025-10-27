@@ -1,6 +1,7 @@
 
 # Endpoint JSON
 {
+  "orgName": "example-org",
   "endpoints": [
     {
       "endpointId": "endpoint-uuid-1",
@@ -13,18 +14,13 @@
       "provider": "Azure",
       "name": "my-blob-container",
       "region": "eastus"
-    },
-    {
-      "endpointId": "endpoint-uuid-3",
-      "provider": "GCP",
-      "name": "my-gcs-bucket",
-      "region": "us-central1"
     }
   ],
-  "TotalEndpoints": 3,
+  "totalEndpoints": 2
 }
 # Endpoint Add JSON
 {
+  "orgName": "example-org",
   "provider": "AWS",
   "name": "new-s3-bucket",
   "region": "us-west-2",
@@ -35,10 +31,12 @@
 }
 # Endpoint Delete JSON
 {
+  "orgName": "example-org",
   "endpointId": "endpoint-uuid-1"
 }
 # Access Policies Secure or not - this the list of endpoint and if they are secure or not not the json policy create another json object where users can get the policy via response if they want
 {
+  "orgName": "example-org",
   "endpoints": [
     {
       "endpointId": "endpoint-uuid-1",
@@ -46,19 +44,13 @@
       "provider": "AWS",
       "securityStatus": "insecure",
       "issueCount": 2
-    },
-    {
-      "endpointId": "endpoint-uuid-2",
-      "name": "my-blob-container",
-      "provider": "Azure",
-      "securityStatus": "secure",
-      "issueCount": 0
     }
   ]
 }
 # Access policy detail
 
 {
+  "orgName": "example-org",
   "endpointId": "endpoint-uuid-1",
   "policyDocument": {
     "Version": "2012-10-17",
@@ -73,9 +65,23 @@
     ]
   }
 }
-# Data endpoint - this will say if the endpoint that have private data in them
+# Data endpoint - this will say if the endpoint that have private data in them and # Private data endpoints
 
 {
+  "orgName": "example-org",
+  "endpoints": [
+    {
+      "endpointId": "endpoint-uuid-1",
+      "name": "my-s3-bucket",
+      "provider": "AWS",
+      "hasPrivateData": true,
+      "dataTypes": ["SSN", "credit-card", "api-keys"]
+    }
+  ]
+}
+
+{
+  "orgName": "example-org",
   "totalEvents": 187,
   "securityIssues": 134,
   "configurationConcerns": 53
@@ -84,6 +90,7 @@
 # Storage Size of endpoints
 
 {
+  "orgName": "example-org",
   "endpoints": [
     {
       "endpointId": "endpoint-uuid-1",
@@ -91,56 +98,19 @@
       "provider": "AWS",
       "sizeGB": 505.5,
       "objectCount": 125430
-    },
-    {
-      "endpointId": "endpoint-uuid-2",
-      "name": "my-blob-container",
-      "provider": "Azure",
-      "sizeGB": 200.0,
-      "objectCount": 54320
     }
   ],
-  "totalSizeGB": 705.5
+  "totalSizeGB": 505.5
 }
 # CSPs that are in use for the organization
 
 {
+  "orgName": "example-org",
   "providers": [
     {
       "name": "AWS",
       "endpointCount": 15,
       "totalStorageGB": 2500.5
-    },
-    {
-      "name": "Azure",
-      "endpointCount": 8,
-      "totalStorageGB": 1200.3
-    },
-    {
-      "name": "GCP",
-      "endpointCount": 5,
-      "totalStorageGB": 800.0
-    }
-  ]
-}
-
-# Private data endpoints
-
-{
-  "endpoints": [
-    {
-      "endpointId": "endpoint-uuid-1",
-      "name": "my-s3-bucket",
-      "provider": "AWS",
-      "hasPrivateData": true,
-      "dataTypes": ["SSN", "credit-card", "api-keys"]
-    },
-    {
-      "endpointId": "endpoint-uuid-2",
-      "name": "my-blob-container",
-      "provider": "Azure",
-      "hasPrivateData": false,
-      "dataTypes": []
     }
   ]
 }

@@ -117,3 +117,77 @@ Here's the plan for getting everything built:
 6. **Test everything** as we go and figure out how to test Python interactively in VS Code
 
 This should help us make sure the database works right and everything connects properly.
+
+
+File strucutre:
+
+app/
+├── __init__.py
+├── main.py
+├── config.py
+│
+├── api/
+│   ├── __init__.py
+│   ├── endpoints.py         # Endpoint CRUD routes
+│   ├── security.py          # Policy & private data routes
+│   ├── events.py            # Events summary routes
+│   ├── storage.py           # Storage size routes
+│   └── providers.py         # CSP coverage routes
+│
+├── models/
+├── schemas/
+├── services/
+├── cloud/
+├── utils/
+└── database/
+
+## Next steps THESE NEED TO BE MADE INTO CARDS
+
+Foundation / project setup
+
+Create repo layout, empty init.py files, config.py, main.py, requirements.txt, Dockerfile, .env.example
+Deliverable: app starts and returns 200 on /health
+Database & config
+
+DB connection/session, sql, migrations, endpoint DB model
+Deliverable: persist and read endpoint records
+Endpoint CRUD (core)
+
+Pydantic request/response models, endpoint service, routes: GET /endpoints, POST /endpoints, DELETE /endpoints/{id}
+Deliverable: add/list/delete endpoints working
+Cloud client base & AWS
+
+Abstract provider interface + aws_client for policy, object list, storage metrics
+Deliverable: fetch policy and size metrics from AWS
+Policy analysis & policy endpoints
+
+policy_analyzer service, GET /security/policies (summary), GET /security/policies/{endpointId} (raw)
+Deliverable: mark endpoints secure/insecure and return raw policy
+Storage metrics & providers
+
+storage_analyzer, GET /storage/size, GET /providers aggregation
+Deliverable: per-endpoint sizes and provider totals
+Private-data scanning (first-pass)
+
+Regex patterns, data_scanner to stream & scan objects, basic result storage
+Deliverable: /security/private-data returns hasPrivateData + dataTypes
+Events & scan orchestration
+
+Event DB model, scanner_service to create events from scans, GET /events/summary
+Deliverable: events summary (counts, recent)
+Background jobs & long-running scans
+
+Integrate background worker (like FastAPI background tasks), retry/rate-limit handling
+Deliverable: async scans with status tracking
+Add Azure & GCP clients
+
+Implement azure_client and gcp_client mirroring AWS client, update services to be provider-agnostic
+Deliverable: same functionality for Azure and GCP
+Auth, secrets & security hardening
+
+API auth (JWT/API keys), secure credential handling (roles/vault), no plain secrets in DB
+Deliverable: secure credentials and API access
+Tests, CI, docs, deployment
+
+Unit/integration tests with mocks, CI pipeline, README, Docker image and compose
+Deliverable: tests passing, CI, and runnable Docker image

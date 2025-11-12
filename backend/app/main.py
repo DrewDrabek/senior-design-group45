@@ -14,3 +14,20 @@ app = FastAPI()
 @app.get("/")
 async def read_root():
     return {"Hello": "World"}
+
+
+# This is probably what we should have at some point - came from this doc I used to help create the dac https://python-dependency-injector.ets-labs.org/examples/fastapi-sqlalchemy.html
+
+# def create_app() -> FastAPI:
+#     container = Container()
+
+#     db = container.db()
+#     db.create_database()
+
+#     app = FastAPI()
+#     app.container = container
+#     app.include_router(endpoints.router)
+#     return app
+
+
+# app = create_app()

@@ -8,6 +8,7 @@ from fastapi import FastAPI
 # - Create the endpoints that will point to the service logic
 # - scanning logic for scanning the endpoints - this most likely will be a service the queries the dac for the last scan date and then schedules a message on a quie to be scanned.
 # This is why we make the dac a library that can be imported so that we can use the service logic in both the endpoints and the scanning logic.
+# Documentation for the backend serivce on the main readme
 
 app = FastAPI()
 

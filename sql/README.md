@@ -8,38 +8,38 @@ Go through and document each one and figure out all of the operations and make s
 ## Table strucuture
 
 ```sql
--- organizations
+-- organizations information here just stores what we need to store about the org
 CREATE TABLE organizations (
   org_id UUID PRIMARY KEY DEFAULT uuidv7(),
   org_name TEXT NOT NULL UNIQUE,
   join_date DATE DEFAULT CURRENT_DATE
 );
 
--- endpoints (store storage in bytes for accuracy)
+-- endpoints, this is the information for the endpoint. I think we should just store the arn for the secrets from like secret manager and then we can pull them in. This would be a cred store we manage.
 CREATE TABLE endpoints (
   endpoint_id UUID PRIMARY KEY DEFAULT uuidv7(),
   org_id UUID NOT NULL REFERENCES organizations(org_id) ON DELETE CASCADE,
-  provider TEXT NOT NULL,               -- 'aws' | 'azure' | 'google'
+  provider TEXT NOT NULL, -- this will be azure, aws, or google but cleaning for this will happen on bussinesse logic              
   name TEXT NOT NULL,
   region TEXT,
   storage_bytes BIGINT DEFAULT 0 NOT NULL,
-  credentials_arn TEXT,                 -- pointer to secrets manager
+  credentials_arn TEXT,                 
   onboarded_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   last_scanned_at TIMESTAMPTZ,
-  CONSTRAINT uq_endpoint_per_org UNIQUE (org_id, provider, name)
+  CONSTRAINT uq_endpoint_per_org UNIQUE (org_id, provider, name) -- this prevents us from getting duplicates
 );
 
--- policies (summary only)
+-- policy information - we dont actually need to store the policy just what we find
 CREATE TABLE policies (
   policy_id UUID PRIMARY KEY DEFAULT uuidv7(),
   endpoint_id UUID NOT NULL REFERENCES endpoints(endpoint_id) ON DELETE CASCADE,
-  security_status TEXT DEFAULT 'unknown', -- 'secure'|'insecure'|'unknown'
+  security_status TEXT DEFAULT 'unknown', -- secure, insecure, unknown this will be clean on business logic as well 
   issue_count INT DEFAULT 0,
   last_scanned_at TIMESTAMPTZ,
   CONSTRAINT uq_policy_per_endpoint UNIQUE (endpoint_id)
 );
 
--- private_data (one summary row per endpoint)
+-- private data found table we might not need this was just writing out the database had this - cant remember why at this point. The events table might cover every we need there.
 CREATE TABLE private_data (
   private_id UUID PRIMARY KEY DEFAULT uuidv7(),
   endpoint_id UUID NOT NULL REFERENCES endpoints(endpoint_id) ON DELETE CASCADE,
@@ -49,7 +49,7 @@ CREATE TABLE private_data (
   CONSTRAINT uq_privatedata_per_endpoint UNIQUE (endpoint_id)
 );
 
--- events
+-- events table 
 CREATE TABLE events (
   event_id UUID PRIMARY KEY DEFAULT uuidv7(),
   endpoint_id UUID REFERENCES endpoints(endpoint_id) ON DELETE SET NULL,
@@ -61,21 +61,10 @@ CREATE TABLE events (
 );
 ```
 
-## Indexes 
-
 ```sql
 
-CREATE INDEX idx_endpoints_org ON endpoints(org_id);
-CREATE INDEX idx_endpoints_provider ON endpoints(provider);
-CREATE INDEX idx_policies_endpoint ON policies(endpoint_id);
-CREATE INDEX idx_privatedata_endpoint ON private_data(endpoint_id);
-CREATE INDEX idx_events_org ON events(org_id);
-CREATE INDEX idx_events_endpoint ON events(endpoint_id);
-CREATE INDEX idx_events_severity ON events(severity);
 
-```
-
-```sql
+-- These are just the queries cleaned up so that we can test them these dont need to be stored in the db they are stored in the dac and then ran there
 
 GET /api/endpoints
 

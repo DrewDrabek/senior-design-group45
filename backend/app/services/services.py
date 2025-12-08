@@ -5,12 +5,12 @@
 # This is what will allow it to call the dac - Will need to be tested as I do not know if that is correct
 
 from typing import Any, Dict, List, Optional
-from backend.app.database.sqlalc_dac import SQLAlchemyDAC
+from app.database.sqlalc_dac import Sql_Alc_DAC
 
 
-class Servies:
+class Services:
 
-    def __init__(self, dac: SQLAlchemyDAC):
+    def __init__(self, dac: Sql_Alc_DAC):
         self.dac = dac
 
     async def get_endpoints_for_org(self, org_id: str) -> List[Dict[str, Any]]:
@@ -46,16 +46,4 @@ class Servies:
     async def get_providers_summary(self, org_id: str) -> List[Dict[str, Any]]:
         return await self.dac.get_providers_summary(org_id)
     
-    # these do not to be used since they are not used by the frontend - they will be used in backgroup ta
 
-    # async def insert_policy(self, endpoint_id: str, security_status: str, issue_count: int) -> None:
-    #     await self.dac.insert_policy(endpoint_id, security_status, issue_count)
-
-    # async def insert_private_data(self, endpoint_id: str, has_private: bool, data_types: List[str]) -> None:
-    #     await self.dac.insert_private_data(endpoint_id, has_private, data_types)
-
-    # async def insert_event(self, endpoint_id: str, org_id: str, event_type: str, description: str, severity: str) -> Dict[str, Any]:
-    #     return await self.dac.insert_event(endpoint_id, org_id, event_type, description, severity)
-
-    # async def update_endpoint_storage(self, endpoint_id: str, storage_bytes: int) -> Dict[str, Any]:
-    #     return await self.dac.update_endpoint_storage(endpoint_id, storage_bytes)

@@ -1,4 +1,10 @@
+import os
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
+
+from app.api import api
+from app.services.services import Services
+from app.database.sqlalc_dac import Sql_Alc_DAC
 
 
 # This is just a test endpoint to verify that the docker builds, runs, and returns something. 
@@ -10,25 +16,32 @@ from fastapi import FastAPI
 # This is why we make the dac a library that can be imported so that we can use the service logic in both the endpoints and the scanning logic.
 # Documentation for the backend serivce on the main readme
 
-app = FastAPI()
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql+asyncpg://drewdrabek@localhost:5432/postgres"
+)
+
+dac = Sql_Alc_DAC(DATABASE_URL, echo=True)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: connect to database
+    await dac.connect()
+    yield
+    # Shutdown: disconnect from database
+    await dac.disconnect()
+
+app = FastAPI(lifespan=lifespan)
+
+# Create service instance and attach to app state
+app.state.dac = dac
+app.state.service = Services(dac)
+# This is probably what we should have at some point - came from this doc I used to help create the dac https://python-dependency-injector.ets-labs.org/examples/fastapi-sqlalchemy.html
+
+app.include_router(api.router)
+    
 
 @app.get("/")
 async def read_root():
-    return {"Hello": "World"}
+    return {"status": "running", "message": "application started okay"}
 
-
-# This is probably what we should have at some point - came from this doc I used to help create the dac https://python-dependency-injector.ets-labs.org/examples/fastapi-sqlalchemy.html
-
-# def create_app() -> FastAPI:
-#     container = Container()
-
-#     db = container.db()
-#     db.create_database()
-
-#     app = FastAPI()
-#     app.container = container
-#     app.include_router(endpoints.router)
-#     return app
-
-
-# app = create_app()

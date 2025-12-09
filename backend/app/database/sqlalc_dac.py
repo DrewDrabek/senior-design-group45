@@ -65,6 +65,17 @@ class Sql_Alc_DAC:
         ORDER BY name;
         """
         return await self.query(sql, {"org_id": org_id})
+
+    async def get_endpoint_by_id(self, endpoint_id: str) -> Dict[str, Any]:
+        sql = """
+        SELECT endpoint_id, org_id, provider, name, region, storage_bytes,
+               ROUND((storage_bytes::numeric / 1024 / 1024 / 1024)::numeric, 3) AS storage_gb,
+               credentials_arn, onboarded_at, last_scanned_at
+        FROM endpoints
+        WHERE endpoint_id = :endpoint_id;
+        """
+        result = await self.query(sql, {"endpoint_id": endpoint_id})
+        return result[0] if result else {}
     
     async def create_endpoint(self, org_id: str, provider: str, name: str, region: Optional[str], credentials_arn: Optional[str]) -> Dict[str, Any]:
         sql = """
@@ -210,4 +221,14 @@ class Sql_Alc_DAC:
         RETURNING endpoint_id, storage_bytes, last_scanned_at;
         """
         result = await self.query(sql, {"endpoint_id": endpoint_id, "storage_bytes": storage_bytes})
+        return result[0] if result else {}
+
+    async def update_last_scanned_at(self, endpoint_id: str) -> Dict[str, Any]:
+        sql = """
+        UPDATE endpoints
+        SET last_scanned_at = now()
+        WHERE endpoint_id = :endpoint_id
+        RETURNING endpoint_id, last_scanned_at;
+        """
+        result = await self.query(sql, {"endpoint_id": endpoint_id})
         return result[0] if result else {}

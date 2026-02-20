@@ -1,9 +1,11 @@
 'use client';
 
 import { useAuth0 } from "@auth0/auth0-react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const { isLoading, isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
+    const { isLoading, isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
+    const router = useRouter();
 
   // 1. Loading State (Prevents flickering)
   if (isLoading) {
@@ -57,7 +59,7 @@ export default function Home() {
       {/* Events */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
         {}
-        <div className="flex flex-col items-center p-6 bg-zinc-50 dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800">
+              <div onClick={() => router.push("/dashboard/events")} className="cursor-pointer hover:scale-105 transition-transform flex flex-col items-center p-6 bg-zinc-50 dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800">
           <div className="w-24 h-24 rounded-full border-4 border-blue-500 flex items-center justify-center mb-4">
             <span className="text-3xl font-bold dark:text-white">12</span>
           </div>
@@ -65,7 +67,7 @@ export default function Home() {
         </div>
 
         {/* Unsecure Endpoints */}
-        <div className="flex flex-col items-center p-6 bg-zinc-50 dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800">
+              <div onClick={() => router.push("/dashboard/unsecure")} className="cursor-pointer hover:scale-105 transition-transform flex flex-col items-center p-6 bg-zinc-50 dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800">
           <div className="w-24 h-24 rounded-full border-4 border-red-500 flex items-center justify-center mb-4">
             <span className="text-3xl font-bold dark:text-white">3</span>
           </div>
@@ -73,7 +75,7 @@ export default function Home() {
         </div>
 
         {/* Total Endpoints Scanned */}
-        <div className="flex flex-col items-center p-6 bg-zinc-50 dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800">
+              <div onClick={() => router.push("/dashboard/endpoints")} className="cursor-pointer hover:scale-105 transition-transform flex flex-col items-center p-6 bg-zinc-50 dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800">
           <div className="w-24 h-24 rounded-full border-4 border-green-500 flex items-center justify-center mb-4">
             <span className="text-3xl font-bold dark:text-white">45</span>
           </div>
